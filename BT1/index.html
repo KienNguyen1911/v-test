@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drag & Drop File Upload</title>
+  <style>
+    #drop-area {
+      border: 2px dashed #ccc;
+      border-radius: 20px;
+      width: 300px;
+      height: 200px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #333;
+      margin: 50px auto;
+    }
+    #drop-area.highlight {
+      border-color: purple;
+    }
+  </style>
+</head>
+<body>
+  <div id="drop-area">
+    Drag & drop a .txt file here
+  </div>
+  <div id="result"></div>
+  <script src="script.js"></script>
+  <script>
+    if (window.Worker) {
+      const worker = new Worker("worker.js");
+      worker.onmessage = function(e) {
+        document.getElementById("result").innerText = e.data;
+      };
+      document.getElementById("drop-area").addEventListener("drop", function(event) {
+        event.preventDefault();
+        const file = event.dataTransfer.files[0];
+        if (file && file.type === "text/plain") {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            worker.postMessage(e.target.result);
+          };
+          reader.readAsText(file);
+        } else {
+          document.getElementById("result").innerText = "Please drop a valid .txt file.";
+        }
+      });
+      document.getElementById("drop-area").addEventListener("dragover", function(event) {
+        event.preventDefault();
+      });
+    } else {
+      document.getElementById("result").innerText = "Your browser does not support Web Workers.";
+    }
+  </script>
+</body>
+</html>
