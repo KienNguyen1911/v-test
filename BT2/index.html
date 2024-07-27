@@ -111,21 +111,15 @@
             let widthWater = blockWidth
             let xPos = i * (blockWidth + blockGap);
 
-            // Adjust x position to include horizontal gap, if the block is higher than the previous block
-            if (numbers[i] > numbers[i-1]) {
-                xPos = xPos - blockGap
-                widthWater = blockWidth + blockGap
-            }
-            
-            // Adjust width of water block, if the block is higher than the next block
-            if (numbers[i] > numbers[i+1]) {
-                widthWater = blockWidth + blockGap
+            if (numbers[i] > numbers[i + 1] ) {
+                widthWater += blockGap * 2;
             }
 
-            // Adjust width of water block, if the block is higher than the previous and next block
-            if (numbers[i] > numbers[i-1] && numbers[i] > numbers[i+1]) {
-                widthWater += blockGap
+            if (numbers[i] >= numbers[i - 1] ) {
+                xPos -= blockGap;
+                widthWater += blockGap;
             }
+
             if (waterHeight > 0) {
                 ctx.fillStyle = '#00a2e8';
                 ctx.fillRect(
@@ -136,7 +130,6 @@
                 );
             }
             waterSquare += waterHeight * widthWater;
-            console.log('ok', waterSquare, waterHeight, widthWater)
         }
 
         alert(`Maximum water that can be trapped: ${waterSquare} cubic units`);

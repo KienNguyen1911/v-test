@@ -1,5 +1,12 @@
 self.onmessage = function(e) {
     const text = e.data;
+    console.log(text)
+    // Check for special characters other than comma, period, and space
+    if (/^[a-zA-Z\s.,]*$/.test(text)) {
+        self.postMessage("The file contains special characters other than comma, period, and space.");
+        return;
+    }
+
     const cleanedText = text.replace(/[.,]/g, '').toLowerCase();
     const words = cleanedText.split(/\s+/);
     const wordCount = {};
@@ -27,5 +34,4 @@ self.onmessage = function(e) {
       Top 3 most frequent words: ${top3Words.join(', ')}
     `;
     self.postMessage(result);
-  };
-  
+};

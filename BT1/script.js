@@ -14,6 +14,7 @@ document.getElementById("drop-area").addEventListener("dragover", (event) => {
     const file = event.dataTransfer.files[0];
     if (file && file.type === "text/plain") {
       const reader = new FileReader();
+      const worker = new Worker('worker.js'); // Declare the 'worker' variable
       reader.onload = (e) => {
         worker.postMessage(e.target.result);
       };
