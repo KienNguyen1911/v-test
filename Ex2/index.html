@@ -16,9 +16,6 @@
                 Gap between blocks: 10px
                 <br>
                 Gap between columns: 10px
-                <br>
-                Water color: #00a2e8
-                <br>
             </code>
         </div>
 
@@ -27,11 +24,12 @@
     </div>
 
 <script>
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
     function draw() {
         const input = document.getElementById('input').value;
         const numbers = input.split(',').map(Number);
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         const blockWidth = 40;
@@ -46,7 +44,6 @@
 
         // Calculate water
         let water = 0;
-        let waterSquare = 0;
         let leftMax = new Array(numbers.length).fill(0);
         let rightMax = new Array(numbers.length).fill(0);
 
@@ -88,11 +85,11 @@
                     widthWater,
                     waterHeight
                 );
+                
             }
-            waterSquare += waterHeight * widthWater;
         }
 
-        alert(`Maximum water that can be trapped: ${waterSquare} cubic units`);
+        alert(`Maximum water that can be trapped: ${water} cubic units`);
     }
 
     function drawGrid() {
