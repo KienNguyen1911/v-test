@@ -4,38 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Draw Blocks and Calculate Water</title>
-    <style>
-        #container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        canvas {
-            border: 1px solid black;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="container">
+        <div class="block">
+            <input type="text" id="input" placeholder="Enter numbers separated by commas">
+            <button onclick="draw()">Draw Blocks</button>
+            <br>
+            <code>
+                Gap between blocks: 10px
+                <br>
+                Gap between columns: 10px
+                <br>
+                Water color: #00a2e8
+                <br>
+            </code>
+        </div>
 
-<input type="text" id="input" placeholder="Enter numbers separated by commas">
-<button onclick="drawBlocks()">Draw Blocks</button>
-<br>
-<code>
-    Gap between blocks: 10px
-    <br>
-    Gap between columns: 10px
-    <br>
-    Water color: #00a2e8
-    <br>
 
-</code>
-
-<div id="container">
-    <canvas id="canvas" width="700" height="400"></canvas>
-</div>
+        <canvas id="canvas" width="700" height="400"></canvas>
+    </div>
 
 <script>
-    function drawBlocks() {
+    function draw() {
         const input = document.getElementById('input').value;
         const numbers = input.split(',').map(Number);
         const canvas = document.getElementById('canvas');
@@ -47,42 +39,10 @@
         const blockGap = 10;
 
         // Draw grid
-        ctx.strokeStyle = '#e7e9eb';
-        for (let x = 0; x <= canvas.width; x += 10) {
-            ctx.beginPath();
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, canvas.height);
-            ctx.stroke();
-        }
-        for (let y = 0; y <= canvas.height; y += 10) {
-            ctx.beginPath();
-            ctx.moveTo(0, y);
-            ctx.lineTo(canvas.width, y);
-            ctx.stroke();
-        }
+        drawGrid();
 
-        // Draw column by length of numbers
-        for (let i = 0; i < numbers.length; i++) {
-            // Draw block by value of numbers[i]
-            for (let j = 0; j < numbers[i]; j++) {
-                ctx.strokeStyle = 'black';
-
-                // Adjust x position to include horizontal gap
-                let xPos = i * (blockWidth + blockGap);
-                // Adjust y position to include vertical gap, except for the first block
-                let yPos = canvas.height - (j + 1) * (blockHeight + blockGap) + blockGap;
-                if (j === 0) {
-                    yPos = canvas.height - (j + 1) * blockHeight;
-                }
-
-                ctx.strokeRect(
-                    xPos,       // x axis
-                    yPos,       // y axis, adjusted for vertical gap
-                    blockWidth, // width
-                    blockHeight // height
-                );
-            }
-        }
+        // Draw blocks
+        drawBlocks(blockWidth, blockHeight, blockGap, numbers);
 
         // Calculate water
         let water = 0;
@@ -133,6 +93,47 @@
         }
 
         alert(`Maximum water that can be trapped: ${waterSquare} cubic units`);
+    }
+
+    function drawGrid() {
+        ctx.strokeStyle = '#e7e9eb';
+        for (let x = 0; x <= canvas.width; x += 10) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, canvas.height);
+            ctx.stroke();
+        }
+        for (let y = 0; y <= canvas.height; y += 10) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(canvas.width, y);
+            ctx.stroke();
+        }
+    }
+
+    function drawBlocks(blockWidth, blockHeight, blockGap, numbers) {
+        // Draw column by length of numbers
+        for (let i = 0; i < numbers.length; i++) {
+            // Draw block by value of numbers[i]
+            for (let j = 0; j < numbers[i]; j++) {
+                ctx.strokeStyle = 'black';
+
+                // Adjust x position to include horizontal gap
+                let xPos = i * (blockWidth + blockGap);
+                // Adjust y position to include vertical gap, except for the first block
+                let yPos = canvas.height - (j + 1) * (blockHeight + blockGap) + blockGap;
+                if (j === 0) {
+                    yPos = canvas.height - (j + 1) * blockHeight;
+                }
+
+                ctx.strokeRect(
+                    xPos,       // x axis
+                    yPos,       // y axis, adjusted for vertical gap
+                    blockWidth, // width
+                    blockHeight // height
+                );
+            }
+        }
     }
 </script>
 
