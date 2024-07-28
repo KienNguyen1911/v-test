@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #333;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* This makes the container take the full viewport height */
+            text-align: center; /* Centers text inside the container */
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .card {
+            background: #ffffff;
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="bento-grid">
+            <!-- 4 cards -->
+            <div class="card">
+                <h3>Exercise 1</h3>
+                <a href="./Ex1/index.html">Drag & Drop file to read content</a>
+            </div>
+            <div class="card">
+                <h3>Exercise 2</h3>
+                <a href="./Ex2/index.html">Calculate volume of water by using Canvas</a>
+            </div>
+            <div class="card">
+                <h3>Exercise 3</h3>
+                <a href="./Ex3/index.html">Reservation System in Restaurant</a>
+            </div>
+            <div class="card">
+                <h3>Exercise 4</h3>
+                <a href="./Ex4/index.html">Telecommunication Solution</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
