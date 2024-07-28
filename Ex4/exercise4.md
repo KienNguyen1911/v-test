@@ -13,7 +13,7 @@ Thiết kế 1 cơ sở dữ liệu lưu trữ thông tin viễn thông bao gồ
 
 ### ERD
 
-![Screenshot from 2024-07-28 01-31-37.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/4813cda7-9fff-4718-ac21-c276c3665563/ab142731-3ed1-4750-a07c-a1eef4ef3e9c/Screenshot_from_2024-07-28_01-31-37.png)
+![Screenshot from 2024-07-28 01-31-37.png](ERD.png)
 
 ### **Truy vấn ra top 3 user có tổng thời lượng cuộc gọi lớn nhất trong tháng vừa rồi.**
 
