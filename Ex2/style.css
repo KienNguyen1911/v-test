@@ -5,7 +5,14 @@
     align-items: center;
     margin-top: 20px;
     gap: 10px;
-    height: 100vh;
+}
+
+.topic {
+    margin: 50px auto;
+    width: 80%;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #333;
 }
 
 canvas {
