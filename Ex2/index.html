@@ -1,138 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Draw Blocks and Calculate Water</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+    <div class="topic">
+        <p><strong><span style="font-size:11pt;">Tạo ra một trang gồm c&oacute;:</span></strong></p>
+        <ul>
+            <li><strong>
+                    <ul>
+                        <li style="list-style-type:disc;font-size:11pt;">
+                            <p><span style="font-size:11pt;">1 &ocirc; input.</span></p>
+                        </li>
+                    </ul>
+                </strong><strong>
+                    <ul>
+                        <li style="list-style-type:disc;font-size:11pt;">
+                            <p><span style="font-size:11pt;">1 container c&oacute; chứa thẻ SVG hoặc Canvas.</span></p>
+                        </li>
+                    </ul>
+                </strong></li>
+        </ul>
+        <p><strong><span style="font-size:11pt;">Y&ecirc;u cầu:</span></strong></p>
+        <ul>
+            <li><strong>
+                    <ul>
+                        <li style="list-style-type:disc;font-size:11pt;">
+                            <p><span style="font-size:11pt;">Đầu v&agrave;o của &ocirc; input sẽ l&agrave; 1 d&atilde;y
+                                    số tự nhi&ecirc;n [0, &infin;) v&agrave; được ngăn c&aacute;ch nhau bởi dấu
+                                    &ldquo;,&rdquo;</span></p>
+                        </li>
+                    </ul>
+                </strong><strong>
+                    <ul>
+                        <li style="list-style-type:disc;font-size:11pt;">
+                            <p><span style="font-size:11pt;">Từ dữ liệu ở &ocirc; input sử dụng javascript vẽ ra
+                                    c&aacute;c h&igrave;nh khối c&oacute; dạng sau bằng canvas:</span></p>
+                        </li>
+                    </ul>
+                </strong></li>
+        </ul>
+    </div>
     <div id="container">
         <div class="block">
             <input type="text" id="input" placeholder="Enter numbers separated by commas">
             <button onclick="draw()">Draw Blocks</button>
-            <br>
-            <code>
-                Gap between blocks: 10px
-                <br>
-                Gap between columns: 10px
-            </code>
         </div>
 
-
-        <canvas id="canvas" width="700" height="400"></canvas>
+        <div class="block">
+            <canvas id="canvas" width="700" height="400"></canvas>
+        </div>
     </div>
 
-<script>
-    var canvas = document.getElementById('canvas');
-    var ctx = canvas.getContext('2d');
+    <script>
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
 
-    function draw() {
-        const input = document.getElementById('input').value;
-        const numbers = input.split(',').map(Number);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function draw() {
+            const input = document.getElementById('input').value;
+            const numbers = input.split(',').map(Number);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        const blockWidth = 40;
-        const blockHeight = 20;
-        const blockGap = 10;
+            const blockWidth = 40;
+            const blockHeight = 20;
+            const blockGap = 10;
 
-        // Draw grid
-        drawGrid();
+            // Draw grid
+            drawGrid();
 
-        // Draw blocks
-        drawBlocks(blockWidth, blockHeight, blockGap, numbers);
+            // Draw blocks
+            drawBlocks(blockWidth, blockHeight, blockGap, numbers);
 
-        // Calculate water
-        let water = 0;
-        let leftMax = new Array(numbers.length).fill(0);
-        let rightMax = new Array(numbers.length).fill(0);
+            // Calculate water
+            let water = 0;
+            let leftMax = new Array(numbers.length).fill(0);
+            let rightMax = new Array(numbers.length).fill(0);
 
-        leftMax[0] = numbers[0];
-        for (let i = 1; i < numbers.length; i++) {
-            leftMax[i] = Math.max(leftMax[i - 1], numbers[i]);
-        }
-
-        rightMax[numbers.length - 1] = numbers[numbers.length - 1];
-        for (let i = numbers.length - 2; i >= 0; i--) {
-            rightMax[i] = Math.max(rightMax[i + 1], numbers[i]);
-        }
-
-        for (let i = 0; i < numbers.length; i++) {
-            water += Math.min(leftMax[i], rightMax[i]) - numbers[i];
-        }
-
-        // Draw water
-        for (let i = 0; i < numbers.length; i++) {
-            const height = numbers[i] * (blockHeight + blockGap);
-            const waterHeight = (Math.min(leftMax[i], rightMax[i]) - numbers[i]) * (blockHeight + blockGap) - blockGap;
-            let widthWater = blockWidth
-            let xPos = i * (blockWidth + blockGap);
-
-            if (numbers[i] > numbers[i + 1] ) {
-                widthWater += blockGap * 2;
+            leftMax[0] = numbers[0];
+            for (let i = 1; i < numbers.length; i++) {
+                leftMax[i] = Math.max(leftMax[i - 1], numbers[i]);
             }
 
-            if (numbers[i] >= numbers[i - 1] ) {
-                xPos -= blockGap;
-                widthWater += blockGap;
+            rightMax[numbers.length - 1] = numbers[numbers.length - 1];
+            for (let i = numbers.length - 2; i >= 0; i--) {
+                rightMax[i] = Math.max(rightMax[i + 1], numbers[i]);
             }
 
-            if (waterHeight > 0) {
-                ctx.fillStyle = '#00a2e8';
-                ctx.fillRect(
-                    xPos,
-                    canvas.height - height - waterHeight,
-                    widthWater,
-                    waterHeight
-                );
-                
+            for (let i = 0; i < numbers.length; i++) {
+                water += Math.min(leftMax[i], rightMax[i]) - numbers[i];
             }
-        }
 
-        alert(`Maximum water that can be trapped: ${water} cubic units`);
-    }
-
-    function drawGrid() {
-        ctx.strokeStyle = '#e7e9eb';
-        for (let x = 0; x <= canvas.width; x += 10) {
-            ctx.beginPath();
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, canvas.height);
-            ctx.stroke();
-        }
-        for (let y = 0; y <= canvas.height; y += 10) {
-            ctx.beginPath();
-            ctx.moveTo(0, y);
-            ctx.lineTo(canvas.width, y);
-            ctx.stroke();
-        }
-    }
-
-    function drawBlocks(blockWidth, blockHeight, blockGap, numbers) {
-        // Draw column by length of numbers
-        for (let i = 0; i < numbers.length; i++) {
-            // Draw block by value of numbers[i]
-            for (let j = 0; j < numbers[i]; j++) {
-                ctx.strokeStyle = 'black';
-
-                // Adjust x position to include horizontal gap
+            // Draw water
+            for (let i = 0; i < numbers.length; i++) {
+                const height = numbers[i] * (blockHeight + blockGap);
+                const waterHeight = (Math.min(leftMax[i], rightMax[i]) - numbers[i]) * (blockHeight + blockGap) - blockGap;
+                let widthWater = blockWidth
                 let xPos = i * (blockWidth + blockGap);
-                // Adjust y position to include vertical gap, except for the first block
-                let yPos = canvas.height - (j + 1) * (blockHeight + blockGap) + blockGap;
-                if (j === 0) {
-                    yPos = canvas.height - (j + 1) * blockHeight;
+
+                if (numbers[i] > numbers[i + 1]) {
+                    widthWater += blockGap * 2;
                 }
 
-                ctx.strokeRect(
-                    xPos,       // x axis
-                    yPos,       // y axis, adjusted for vertical gap
-                    blockWidth, // width
-                    blockHeight // height
-                );
+                if (numbers[i] >= numbers[i - 1]) {
+                    xPos -= blockGap;
+                    widthWater += blockGap;
+                }
+
+                if (waterHeight > 0) {
+                    ctx.fillStyle = '#00a2e8';
+                    ctx.fillRect(
+                        xPos,
+                        canvas.height - height - waterHeight,
+                        widthWater,
+                        waterHeight
+                    );
+
+                }
+            }
+
+            alert(`Maximum water that can be trapped: ${water} cubic units`);
+        }
+
+        function drawGrid() {
+            ctx.strokeStyle = '#e7e9eb';
+            for (let x = 0; x <= canvas.width; x += 10) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = 0; y <= canvas.height; y += 10) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
             }
         }
-    }
-</script>
+
+        function drawBlocks(blockWidth, blockHeight, blockGap, numbers) {
+            // Draw column by length of numbers
+            for (let i = 0; i < numbers.length; i++) {
+                // Draw block by value of numbers[i]
+                for (let j = 0; j < numbers[i]; j++) {
+                    ctx.strokeStyle = 'black';
+
+                    // Adjust x position to include horizontal gap
+                    let xPos = i * (blockWidth + blockGap);
+                    // Adjust y position to include vertical gap, except for the first block
+                    let yPos = canvas.height - (j + 1) * (blockHeight + blockGap) + blockGap;
+                    if (j === 0) {
+                        yPos = canvas.height - (j + 1) * blockHeight;
+                    }
+
+                    ctx.strokeRect(
+                        xPos,       // x axis
+                        yPos,       // y axis, adjusted for vertical gap
+                        blockWidth, // width
+                        blockHeight // height
+                    );
+                }
+            }
+        }
+    </script>
 
 </body>
+
 </html>

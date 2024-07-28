@@ -1,18 +1,33 @@
 #container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     margin-top: 20px;
     gap: 10px;
+    height: 100vh;
 }
+
 canvas {
     border: 1px solid black;
 }
+
+.block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
 input[type="text"] {
     padding: 10px;
     margin-right: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    width: 546px;
 }
+
 button {
     padding: 10px 20px;
     background-color: #007bff;
@@ -21,6 +36,7 @@ button {
     border-radius: 4px;
     cursor: pointer;
 }
+
 button:hover {
     background-color: #0056b3;
 }

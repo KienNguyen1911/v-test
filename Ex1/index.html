@@ -1,60 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drag & Drop File Upload</title>
-  <style>
-    #drop-area {
-      border: 2px dashed #ccc;
-      border-radius: 20px;
-      width: 300px;
-      height: 200px;
-      font-family: Arial, sans-serif;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: #333;
-      margin: 50px auto;
-    }
-    #drop-area.highlight {
-      border-color: purple;
-    }
-  </style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Drag & Drop File Upload</title>
+	<style>
+		#drop-area {
+			border: 2px dashed #ccc;
+			border-radius: 20px;
+			width: 300px;
+			height: 200px;
+			font-family: Arial, sans-serif;
+			font-size: 16px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			color: #333;
+			margin: 50px auto;
+		}
+
+		#drop-area.highlight {
+			border-color: purple;
+		}
+
+		.topic {
+			margin: 50px auto;
+			width: 80%;
+			font-family: Arial, sans-serif;
+			font-size: 16px;
+			color: #333;
+		}
+	</style>
 </head>
+
 <body>
-  <div id="drop-area">
-    Drag & drop a .txt file here
-  </div>
-  <div id="result"></div>
-  <script src="script.js"></script>
-  <script>
-    if (window.Worker) {
-      const worker = new Worker("worker.js");
-      worker.onmessage = function(e) {
-        document.getElementById("result").innerText = e.data;
-      };
-      document.getElementById("drop-area").addEventListener("drop", function(event) {
-        event.preventDefault();
-        const file = event.dataTransfer.files[0];
-        if (file && file.type === "text/plain") {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            worker.postMessage(e.target.result);
-          };
-          reader.readAsText(file);
-        } else {
-          document.getElementById("result").innerText = "Please drop a valid .txt file.";
-        }
-      });
-      document.getElementById("drop-area").addEventListener("dragover", function(event) {
-        event.preventDefault();
-      });
-    } else {
-      document.getElementById("result").innerText = "Your browser does not support Web Workers.";
-    }
-  </script>
+	<div class="topic">
+		<p><strong><span style="font-size:11pt;">Tạo 1 Drag&amp;Drop container đọc file văn bản (.txt) người d&ugrave;ng
+					k&eacute;o thả v&agrave;o v&agrave; thống k&ecirc; ra tổng số từ kh&aacute;c nhau xuất hiện trong
+					file văn bản
+					v&agrave; 3 từ được lặp lại nhiều nhất c&ugrave;ng số lần lặp lại của 3 từ
+					đ&oacute;.</span></strong><span style="font-size:11pt;">&nbsp;(Lưu &yacute; kh&ocirc;ng ph&acirc;n
+				biệt chữ hoa hay chữ thường)</span></p>
+		<p><span style="font-size:11pt;">File văn bản chỉ sử dụng k&yacute; tự alphabet, kh&ocirc;ng chứa sốr.</span>
+		</p>
+		<p><span style="font-size:11pt;">File văn bản chỉ chứa c&aacute;c k&yacute; tự đặc biệt sau:</span></p>
+		<ul>
+			<li style="list-style-type:disc;font-size:11pt;">
+				<p><span style="font-size:11pt;">chấm (.)</span></p>
+			</li>
+			<li style="list-style-type:disc;font-size:11pt;">
+				<p><span style="font-size:11pt;">phẩy (,)</span></p>
+			</li>
+			<li style="list-style-type:disc;font-size:11pt;">
+				<p><span style="font-size:11pt;">khoảng trắng ( )</span></p>
+			</li>
+		</ul <p><strong><span style="font-size:11pt;">Y&ecirc;u cầu:</span></strong></p>
+		<ul>
+			<li style="list-style-type:disc;font-size:11pt;">
+				<p><span style="font-size:11pt;">Nếu kh&ocirc;ng phải file c&oacute; đu&ocirc;i định dạng
+						&ldquo;.txt&rdquo; sẽ
+						b&aacute;o lỗi.</span></p>
+			</li>
+			<li style="list-style-type:disc;font-size:11pt;">
+				<p><span style="font-size:11pt;">Nếu file c&oacute; &iacute;t hơn 3 từ kh&aacute;c nhau sẽ b&aacute;o
+						lỗi.</span></p>
+			</li>
+			<li style="list-style-type:disc;font-size:11pt;">
+				<p><span style="font-size:11pt;">Kiểm tra c&aacute;c y&ecirc;u cầu của file văn bản theo m&ocirc; tả ở
+						tr&ecirc;n nếu kh&ocirc;ng thoả m&atilde;n sẽ b&aacute;o lỗi.</span></p>
+			</li>
+			<li style="list-style-type:disc;font-size:11pt;">
+				<p><span style="font-size:11pt;">Sử dụng Web worker để xử l&yacute; văn bản.</span></p>
+			</li>
+		</ul>
+	</div>
+	<div id="drop-area">
+		Drag & drop a .txt file here
+	</div>
+	<div id="result"></div>
+	<script src="script.js"></script>
+	<script>
+		if (window.Worker) {
+			const worker = new Worker("worker.js");
+			worker.onmessage = function (e) {
+				document.getElementById("result").innerText = e.data;
+			};
+			document.getElementById("drop-area").addEventListener("drop", function (event) {
+				event.preventDefault();
+				const file = event.dataTransfer.files[0];
+				if (file && file.type === "text/plain") {
+					const reader = new FileReader();
+					reader.onload = function (e) {
+						worker.postMessage(e.target.result);
+					};
+					reader.readAsText(file);
+				} else {
+					document.getElementById("result").innerText = "Please drop a valid .txt file.";
+				}
+			});
+			document.getElementById("drop-area").addEventListener("dragover", function (event) {
+				event.preventDefault();
+			});
+		} else {
+			document.getElementById("result").innerText = "Your browser does not support Web Workers.";
+		}
+	</script>
 </body>
+
 </html>
